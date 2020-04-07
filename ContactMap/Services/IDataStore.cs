@@ -11,5 +11,11 @@ namespace ContactMap.Services
         Task<bool> DeleteItemAsync(string id);
         Task<T> GetItemAsync(string id);
         Task<IEnumerable<T>> GetItemsAsync(bool forceRefresh = false);
+
+        Task<bool> AddPersonAsync(T person);
+        Task<bool> UpdatePersonAsync(T person);
+        Task<bool> DeletePersonAsync(string id);
+        Task<T> GetPersonAsync(string id);
+        Task<IEnumerable<T>> GetPeopleAsync(bool forceRefresh = false);
     }
 }
