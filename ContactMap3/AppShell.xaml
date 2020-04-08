@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       xmlns:views="clr-namespace:ContactMap3.views"
+       mc:Ignorable="d"
+       x:Class="ContactMap3.AppShell">
+
+    <Tab Title="Contacts">
+            <ShellContent Route="contacts"
+                          Title="Contacts"
+                          ContentTemplate="{DataTemplate views:ContactsPage}" />
+    </Tab>
+    <Tab Title="Map">
+        <ShellContent Title="Map">
+            <views:MapPage/>
+        </ShellContent>
+    </Tab>
+
+</Shell>
