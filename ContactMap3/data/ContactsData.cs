@@ -6,10 +6,12 @@ namespace ContactMap3.data
 {
     public static class ContactsData
     {
-        public static List<Person> Contacts;
+        public static IList<Person> Contacts { get; private set; }
+
         static ContactsData()
         {
             Contacts = new List<Person>();
+
             Contacts.Add(new Person
                 {Name="Bob",
                 Phone="(705)867-5309",

@@ -89,7 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ContactMap3\ContactMap3.csproj">
-      <Project>{4AE2E0B9-16EF-4E00-89E3-DB7C99EFB64D}</Project>
+      <Project>{EA06C5C4-E629-4A22-8B80-F26185AF8041}</Project>
       <Name>ContactMap3</Name>
     </ProjectReference>
   </ItemGroup>

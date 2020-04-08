@@ -22,7 +22,7 @@
         </Style>
     </ContentPage.Resources>
     <CollectionView Margin="20"
-                    ItemsSource="x:Static data:ContactsData.Contacts"
+                    ItemsSource="{x:Static data:ContactsData.Contacts}"
                     ItemTemplate="{StaticResource ContactTemplate}"
                     SelectionMode="Single"
                     SelectionChanged="OnCollectionViewSelectionChanged" />
