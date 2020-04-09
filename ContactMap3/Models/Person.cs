@@ -1,5 +1,4 @@
-﻿using System;
-namespace ContactMap3.Models
+﻿namespace ContactMap3.Models
 {
     public class Person
     {
