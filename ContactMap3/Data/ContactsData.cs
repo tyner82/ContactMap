@@ -13,7 +13,9 @@ namespace ContactMap3.Data
             Contacts = new List<Person>();
 
             Contacts.Add(new Person
-                {Name="Bob",
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name ="Bob",
                 Phone="(705)867-5309",
                 Address=new Address
                 {
@@ -24,9 +26,10 @@ namespace ContactMap3.Data
                     State = "Ontario",
                     Street = "Hwy 141"
                 }
-                });
+            });
             Contacts.Add(new Person
             {
+                Id = Guid.NewGuid().ToString(),
                 Name = "Alice",
                 Phone = "(705)867-5309",
                 Address = new Address
@@ -41,6 +44,7 @@ namespace ContactMap3.Data
             });
             Contacts.Add(new Person
             {
+                Id = Guid.NewGuid().ToString(),
                 Name = "John",
                 Phone = "(705)867-5309",
                 Address = new Address
@@ -55,6 +59,7 @@ namespace ContactMap3.Data
             });
             Contacts.Add(new Person
             {
+                Id = Guid.NewGuid().ToString(),
                 Name = "David",
                 Phone = "(705)867-5309",
                 Address = new Address
@@ -69,6 +74,7 @@ namespace ContactMap3.Data
             });
             Contacts.Add(new Person
             {
+                Id = Guid.NewGuid().ToString(),
                 Name = "Sarah",
                 Phone = "(705)867-5309",
                 Address = new Address
@@ -83,6 +89,7 @@ namespace ContactMap3.Data
             });
             Contacts.Add(new Person
             {
+                Id = Guid.NewGuid().ToString(),
                 Name = "Pat",
                 Phone = "(705)867-5309",
                 Address = new Address

@@ -8,23 +8,11 @@ namespace ContactMap3.Data
 {
     public class MockDataStore : IDataStore<Person>
     {
-        public readonly List<Person> Contacts;
+        public readonly IList<Person> Contacts;
 
         public MockDataStore()
         {
-            Contacts = new List<Person>()
-            {
-                new Person{
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "Bob",
-                    Address = new AddressCl{
-                        Number = "123",
-                        City = "Lubbock",
-                        Postal = "80192",
-                        State="Texas",
-                        Street = "82nd Ave"},
-                    Phone="(905)867-5309" }
-            };
+            Contacts = ContactsData.Contacts;
 
         }
 
