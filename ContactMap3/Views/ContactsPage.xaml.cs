@@ -6,6 +6,7 @@ using Xamarin.Forms;
 
 namespace ContactMap3.Views
 {
+
     public partial class ContactsPage : ContentPage
     {
         public ContactsPage()

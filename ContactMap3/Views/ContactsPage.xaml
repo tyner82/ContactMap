@@ -4,7 +4,18 @@
              xmlns:data="clr-namespace:ContactMap3.Data"
              x:Class="ContactMap3.Views.ContactsPage"
              Title="Contacts">
-    <ContentPage.Resources>
+    
+    <CollectionView Margin="20"
+                    ItemsSource="{x:Static data:ContactsData.Contacts}"
+                    ItemTemplate="{StaticResource ContactTemplate}"
+                    SelectionMode="Single"
+                    SelectionChanged="OnCollectionViewSelectionChanged" />
+
+
+</ContentPage>
+
+<!--
+<ContentPage.Resources>
         <Style TargetType="Grid">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
@@ -21,11 +32,4 @@
             </Setter>
         </Style>
     </ContentPage.Resources>
-    <CollectionView Margin="20"
-                    ItemsSource="{x:Static data:ContactsData.Contacts}"
-                    ItemTemplate="{StaticResource ContactTemplate}"
-                    SelectionMode="Single"
-                    SelectionChanged="OnCollectionViewSelectionChanged" />
-
-
-</ContentPage>
+-->
