@@ -4,7 +4,7 @@ using System.Linq;
 using ContactMap3.Models;
 using Xamarin.Forms;
 
-namespace ContactMap3.views
+namespace ContactMap3.Views
 {
     public partial class ContactsPage : ContentPage
     {

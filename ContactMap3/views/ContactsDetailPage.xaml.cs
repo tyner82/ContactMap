@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ContactMap3.data;
+using ContactMap3.Data;
 
 using Xamarin.Forms;
 
-namespace ContactMap3.views
+namespace ContactMap3.Views
 {
+    [QueryProperty("Name","name")]
     public partial class ContactsDetailPage : ContentPage
     {
         public string Name

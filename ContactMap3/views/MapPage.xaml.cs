@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Xamarin.Forms;
 
-namespace ContactMap3.views
+namespace ContactMap3.Views
 {
     public partial class MapPage : ContentPage
     {

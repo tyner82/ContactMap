@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Essentials;
-using ContactMap3.views;
+using ContactMap3.Views;
 
 namespace ContactMap3
 {
