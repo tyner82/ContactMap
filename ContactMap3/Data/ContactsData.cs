@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using ContactMap3.Models;
+using Xamarin.Forms;
 
 namespace ContactMap3.Data
 {
     public static class ContactsData
     {
         public static IList<Person> Contacts { get; private set; }
-
+        //public static string SelectedItem=null;
         static ContactsData()
         {
             Contacts = new List<Person>();

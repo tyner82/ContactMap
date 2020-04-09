@@ -1,14 +1,14 @@
-﻿using System;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
 using ContactMap3.Data;
-
 using Xamarin.Forms;
+using System;
 
 namespace ContactMap3.Views
 {
-    [QueryProperty("UId","uid")]
-    public partial class ContactsDetailPage : ContentPage
+
+    [QueryProperty("UId", "uid")]
+    public partial class ModifyContactPage : ContentPage
     {
         public string UId
         {
@@ -18,14 +18,9 @@ namespace ContactMap3.Views
             }
         }
 
-        public ContactsDetailPage()
+        public ModifyContactPage()
         {
             InitializeComponent();
-        }
-
-        protected override bool OnBackButtonPressed()
-        {
-            return base.OnBackButtonPressed();
         }
     }
 }
