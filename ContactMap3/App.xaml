@@ -7,23 +7,24 @@
              x:Class="ContactMap3.App">
 <Application.Resources>
         <DataTemplate x:Key="ContactTemplate">
-            <Grid Padding="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="1" 
-                       Text="{Binding Name}" 
-                       FontAttributes="Bold" />
-                <Label Grid.Row="1"
-                       Grid.Column="1" 
-                       Text="{Binding Phone}"
-                       VerticalOptions="End" />
-            </Grid>
+                <Grid Padding="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                
+                    <Label Grid.Column="1" 
+                           Text="{Binding Name}" 
+                           FontAttributes="Bold" />
+                    <Label Grid.Row="1"
+                           Grid.Column="1" 
+                           Text="{Binding Phone}"
+                           VerticalOptions="End" />
+                </Grid>
         </DataTemplate>
     </Application.Resources>
 </Application>

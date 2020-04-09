@@ -27,6 +27,8 @@ namespace ContactMap3
         void RegisterRoutes()
         {
             routes.Add("contactdetails", typeof(ContactsDetailPage));
+            //routes.Add("modifycon", typeof(ModifyContactPage));
+            //routes.Add("modifyaddr", typeof(ModifyAddressPage));
 
             foreach (var item in routes)
             {

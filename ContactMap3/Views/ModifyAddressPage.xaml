@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:data="clr-namespace:ContactMap3.Data"
+             x:Class="ContactMap3.Views.ModifyAddressPage">
+
+    <StackLayout>
+        <StackLayout Orientation="Horizontal"
+                   HorizontalOptions="Center" >
+            <Label Text="Street Number" />
+            <Entry x:Name="ENumber" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal"
+                   HorizontalOptions="Center" >
+            <Label Text="Street Name" />
+            <Entry x:Name="EStreet" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal"
+                   HorizontalOptions="Center" >
+            <Label Text="City" />
+            <Entry x:Name="ECity" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal"
+                   HorizontalOptions="Center" >
+            <Label Text="State/Province" />
+            <Entry x:Name="EState" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal"
+                   HorizontalOptions="Center" >
+            <Label Text="Area/Postal Code"/>
+            <Entry x:Name="EPostal"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal"
+                   HorizontalOptions="Center" >
+            <Label Text="Country"/>
+            <Picker x:Name="ECountry"
+                    SelectedIndex="0"
+                    ItemsSource="{x:Static data:CountryData.List}"/>
+        </StackLayout>
+    </StackLayout>
+</ContentPage>
