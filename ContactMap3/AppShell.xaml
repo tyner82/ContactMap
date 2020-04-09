@@ -8,14 +8,15 @@
        x:Class="ContactMap3.AppShell">
 
     <Tab Title="Contacts">
-            <ShellContent Route="contacts"
+            <ShellContent Route="contactspage"
                           Title="Contacts"
                           ContentTemplate="{DataTemplate views:ContactsPage}" />
     </Tab>
     <Tab Title="Map">
-        <ShellContent Title="Map">
-            <views:MapPage/>
-        </ShellContent>
+        <ShellContent Route="mappage"
+                      Title="Map"
+                      ContentTemplate="{DataTemplate views:MapPage}" />
+
     </Tab>
 
 </Shell>
