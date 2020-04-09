@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using ContactMap3.Models;
 
-namespace ContactMap3.data
+namespace ContactMap3.Data
 {
     public static class ContactsData
     {
