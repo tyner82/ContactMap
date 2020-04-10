@@ -13,7 +13,10 @@ namespace ContactMap3.Views
 
             BindingContext = new ContactsViewModel();
         }
-        /* moved to viewmodel
+
+        void ToolbarItem_Clicked(System.Object sender, System.EventArgs e)
+        {
+        }        /* moved to viewmodel
         public Person SelectedItem
         {
             get { return _SelectedItem; }

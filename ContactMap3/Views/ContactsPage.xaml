@@ -5,6 +5,14 @@
              xmlns:viewmodel="clr-namespace:ContactMap3.ViewModels"
              x:Class="ContactMap3.Views.ContactsPage"
              Title="Contacts">
+    
+        <ContentPage.ToolbarItems>
+    <ToolbarItem Text="+"
+                 Order="Primary"
+                 Priority="0"
+                 Command="{Binding AddContactCommand}" />
+        </ContentPage.ToolbarItems>
+    <ContentPage.Content>
     <CollectionView Margin="20"
                     x:DataType="viewmodel:ContactsViewModel"
                     ItemsSource="{x:Static data:ContactsData.Contacts}"
@@ -12,6 +20,6 @@
                     SelectionMode="Single"
                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                     SelectionChangedCommand="{Binding SelectionCommand}" />
-
+    </ContentPage.Content>
 
 </ContentPage>

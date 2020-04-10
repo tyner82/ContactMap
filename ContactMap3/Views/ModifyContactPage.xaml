@@ -1,5 +1,53 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ContactMap3.Views.ModifyContactPage">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:data="clr-namespace:ContactMap3.Data"
+             xmlns:viewmodel="clr-namespace:ContactMap3.ViewModels"
+             x:Class="ContactMap3.Views.ModifyContactPage">
     <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+            <StackLayout Orientation="Vertical" Grid.Column="1" Grid.Row="1">
+                <StackLayout Orientation="Horizontal" >
+                    <Label Text="Name" />
+                    <Entry Placeholder="John Doe" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" >
+                    <Label Text="Phone" />
+                    <Entry Placeholder="+1(123) 456-789" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" >
+                    <Label Text="Street" />
+                    <Entry Placeholder="123 4th St" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" >
+                    <Label Text="City" />
+                    <Entry Placeholder="Houston" />
+                </StackLayout>
+                <StackLayout>
+                    <Picker  Title="Select a State"
+                            ItemsSource="{Binding States}"
+                            SelectedItem="{Binding SelectedStateName, Mode=TwoWay}" />
+                    </StackLayout>
+                <StackLayout>
+                    <Picker  Title="Select a Country"
+                            ItemsSource="{Binding Countries}"
+                            SelectedItem="{Binding SelectedCountryName, Mode=TwoWay}" />
+                    </StackLayout>
+                <StackLayout Orientation="Horizontal" >
+                    <Label Text="Area/Postal Code" />
+                    <Entry Placeholder="12345" />
+                </StackLayout>
+                <Button Text="Submit" />
+            </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

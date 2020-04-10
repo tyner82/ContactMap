@@ -8,12 +8,12 @@ namespace ContactMap3.ViewModels
 {
     public class ContactsViewModel: BaseViewModel
     {
-        public Person _selectedItem;
+        public Person selectedItem;
 
         public Person SelectedItem
         {
-            get { return _selectedItem; }
-            set { SetProperty(ref _selectedItem, value); }
+            get { return selectedItem; }
+            set { SetProperty(ref selectedItem, value); }
         }
 
 
