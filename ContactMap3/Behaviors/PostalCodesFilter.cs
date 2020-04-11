@@ -8,7 +8,7 @@ namespace ContactMap3.Behaviors
     {
         public static string PostalCodesFilter(string message)
         {
-            message = String.Join("", message.ToUpper().Split(" "[0]));
+            message = String.Join("", message.Split(" "[0]));
             string temp = message;
             List<char> mList = new List<char>(message.ToCharArray());
             if (message.Length > 3)
@@ -21,16 +21,12 @@ namespace ContactMap3.Behaviors
             }
             message = new string(mList.ToArray());
 
-            return message;
-        }
-        public static bool ValidLetter(char l)
-        {
-            return ((((int)l) > 64) && (((int)l) < 91));
+            return message.ToUpper();
         }
 
         public static bool MatchesPostalCode(string message)
         {
-            message = String.Join("", message.ToUpper().Split(" "[0]));
+            message = String.Join("", message.Split(" "[0]));
             bool condition = true;
             for (int i = 0; i < message.Length; i++)
             {

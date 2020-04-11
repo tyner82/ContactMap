@@ -18,7 +18,7 @@
             <StackLayout Orientation="Vertical" Grid.Column="1" Grid.Row="1">
                 <StackLayout Orientation="Horizontal" >
                     <Label Text="Name" />
-                    <Entry Placeholder="John Doe" />
+                    <Entry Text="{Binding Name}" Placeholder="John Doe" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" >
                     <Label Text="Phone" />
@@ -26,11 +26,11 @@
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" >
                     <Label Text="Street" />
-                    <Entry Placeholder="123 4th St" />
+                    <Entry Text="{Binding Street}" Placeholder="123 4th St" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" >
                     <Label Text="City" />
-                    <Entry Placeholder="Houston" />
+                    <Entry Text="{Binding City}" Placeholder="Houston" />
                 </StackLayout>
                 <StackLayout>
                     <Picker  Title="{Binding StateTitle}"

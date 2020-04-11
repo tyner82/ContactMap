@@ -6,11 +6,6 @@ namespace ContactMap3.Behaviors
     public partial class FilterFunctions
     {
 
-        public static bool IsNum(char c)
-        {
-            int strInt = (int)c;
-            return (strInt >= 48 & strInt <= 57);
-        }
 
         static string AsStrictNum(string message)
         {

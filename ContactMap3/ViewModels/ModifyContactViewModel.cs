@@ -7,6 +7,25 @@ namespace ContactMap3.ViewModels
 {
     public class ModifyContactViewModel : BaseViewModel
     {
+
+        string selectedCountryName;
+        string selectedStateName;
+        List<string> states;
+        List<string> countries;
+        string phone;
+        bool isValidPostal;
+        string zipCode;
+        Filter phoneFilter;
+        Filter postalFilter;
+        Func<string, bool> matchPostal;
+        Filter wordFilter = new Filter(FilterFunctions.WordFilter);
+        string zipPlace;
+        string stateTitle;
+        string postalLabel;
+        string name;
+        string street;
+        string city;
+
         public ModifyContactViewModel()
         {
             countries = AddressData.Countries;
@@ -18,19 +37,6 @@ namespace ContactMap3.ViewModels
             stateTitle = "Select a State";
             postalLabel = "Zip Code";
         }
-        string selectedCountryName;
-        string selectedStateName;
-        List<string> states;
-        List<string> countries;
-        string phone;
-        bool isValidPostal;
-        string zipCode;
-        Filter phoneFilter;
-        Filter postalFilter;
-        Func<string, bool> matchPostal;
-        string zipPlace;
-        string stateTitle;
-        string postalLabel;
 
         public string FiltPhone
         {
@@ -45,6 +51,44 @@ namespace ContactMap3.ViewModels
             }
         }
 
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                if (value != name)
+                {
+                    name = wordFilter(value);
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string Street
+        {
+            get { return street; }
+            set
+            {
+                if (value != street)
+                {
+                    street = wordFilter(value);
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string City
+        {
+            get { return city; }
+            set
+            {
+                if (value != city)
+                {
+                    city = wordFilter(value);
+                    OnPropertyChanged();
+                }
+            }
+        }
         public string PostalLabel
         {
             get { return postalLabel; }
