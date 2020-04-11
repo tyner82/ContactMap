@@ -22,7 +22,7 @@
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" >
                     <Label Text="Phone" />
-                    <Entry Placeholder="+1(123) 456-789" />
+                    <Entry Text="{Binding FiltPhone}" Placeholder="+1(123)456-789" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" >
                     <Label Text="Street" />
@@ -33,7 +33,7 @@
                     <Entry Placeholder="Houston" />
                 </StackLayout>
                 <StackLayout>
-                    <Picker  Title="Select a State"
+                    <Picker  Title="{Binding StateTitle}"
                             ItemsSource="{Binding States}"
                             SelectedItem="{Binding SelectedStateName, Mode=TwoWay}" />
                     </StackLayout>
@@ -43,8 +43,8 @@
                             SelectedItem="{Binding SelectedCountryName, Mode=TwoWay}" />
                     </StackLayout>
                 <StackLayout Orientation="Horizontal" >
-                    <Label Text="Area/Postal Code" />
-                    <Entry Placeholder="12345" />
+                    <Label Text="{Binding PostalLabel}" />
+                    <Entry Text="{Binding ZipCode}" Placeholder="{Binding ZipPlace}" />
                 </StackLayout>
                 <Button Text="Submit" />
             </StackLayout>

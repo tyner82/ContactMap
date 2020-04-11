@@ -13,13 +13,16 @@
                  Command="{Binding AddContactCommand}" />
         </ContentPage.ToolbarItems>
     <ContentPage.Content>
-    <CollectionView Margin="20"
-                    x:DataType="viewmodel:ContactsViewModel"
-                    ItemsSource="{x:Static data:ContactsData.Contacts}"
-                    ItemTemplate="{StaticResource ContactTemplate}"
-                    SelectionMode="Single"
-                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                    SelectionChangedCommand="{Binding SelectionCommand}" />
+        <ScrollView>
+            <CollectionView Margin="20"
+                            x:DataType="viewmodel:ContactsViewModel"
+                            ItemsSource="{x:Static data:ContactsData.Contacts}"
+                            ItemTemplate="{StaticResource ContactTemplate}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                            SelectionChangedCommand="{Binding SelectionCommand}" />
+        </ScrollView>
     </ContentPage.Content>
+
 
 </ContentPage>
