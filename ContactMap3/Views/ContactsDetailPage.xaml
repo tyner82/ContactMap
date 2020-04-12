@@ -3,15 +3,27 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ContactMap3.Views.ContactsDetailPage"
              Title="Contact Details">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Edit"
+                        Order="Primary"
+                        Priority="0"
+                        Command="{Binding ModifyContactCommand}" />
+    </ContentPage.ToolbarItems>
     <ScrollView>
         <StackLayout Margin="20">
-            <Label Text="{Binding Name}" 
+            <Label Text="{Binding Person.Name}" 
                    HorizontalOptions="Center" />
-            <Label Text="{Binding Address.Number}"
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                <Label Text="{Binding Person.Address.Number}"
+                       HorizontalOptions="Center" />
+                <Label Text="{Binding Person.Address.Street}"
+                       HorizontalOptions="Center" />
+            </StackLayout>
+            <Label Text="{Binding Person.Address.City}"
                    HorizontalOptions="Center" />
-            <Label Text="{Binding Address.Street}"
+            <Label Text="{Binding Person.Address.State}"
                    HorizontalOptions="Center" />
-            <Label Text="{Binding Address.City}"
+            <Label Text="{Binding Person.Address.Postal}"
                    HorizontalOptions="Center" />
         </StackLayout>
     </ScrollView>

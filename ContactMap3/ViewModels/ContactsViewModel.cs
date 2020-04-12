@@ -31,6 +31,7 @@ namespace ContactMap3.ViewModels
         public ICommand AddContactCommand => new Command(AddContact);
         private async void AddContact()
         {
+            Console.WriteLine("Going to modify contact...");
             await Shell.Current.GoToAsync($"modifycontact?uid={"0"}");
         }
     }

@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Input;
 using ContactMap3.Behaviors;
 using ContactMap3.Data;
+using ContactMap3.Models;
+using ContactMap3.Views;
+using Xamarin.Forms;
 
 namespace ContactMap3.ViewModels
 {
     public class ModifyContactViewModel : BaseViewModel
     {
-
+        Person person;
         string selectedCountryName;
         string selectedStateName;
         List<string> states;
@@ -25,6 +30,8 @@ namespace ContactMap3.ViewModels
         string name;
         string street;
         string city;
+        string id;
+        bool isUpdate = false;
 
         public ModifyContactViewModel()
         {
@@ -33,9 +40,31 @@ namespace ContactMap3.ViewModels
             phoneFilter = new Filter(FilterFunctions.PhoneFilter);
             postalFilter = new Filter(FilterFunctions.ZipCodesFilter);
             matchPostal = x => true;
-            zipPlace = "12345"; 
+            zipPlace = "12345";
             stateTitle = "Select a State";
             postalLabel = "Zip Code";
+            isUpdate = false;
+
+
+            MessagingCenter.Subscribe<ModifyContactPage, string>(this, "uid", (sender, arg) =>
+            {
+                if (arg != "0")
+                {
+                    person = ContactsData.Contacts.FirstOrDefault(p => p.Id == arg);
+                    id = person.Id;
+                    Name = person.Name;
+                    FiltPhone = person.Phone;
+                    string combineStreet = person.Address.Number+" " + person.Address.Street;
+                    Street = combineStreet;
+                    City = person.Address.City;
+                    SelectedCountryName = person.Address.Country;
+                    SelectedStateName = person.Address.State;
+                    ZipCode = person.Address.Postal;
+                    isUpdate = true;
+                }
+
+                //Console.WriteLine("@ modifyviewmodel" + arg);
+            });
         }
 
         public string FiltPhone
@@ -89,6 +118,7 @@ namespace ContactMap3.ViewModels
                 }
             }
         }
+
         public string PostalLabel
         {
             get { return postalLabel; }
@@ -114,6 +144,7 @@ namespace ContactMap3.ViewModels
                 }
             }
         }
+
         public string ZipPlace
         {
             get { return zipPlace; }
@@ -126,6 +157,7 @@ namespace ContactMap3.ViewModels
                 }
             }
         }
+
         public string ZipCode
         {
             get { return zipCode; }
@@ -136,7 +168,7 @@ namespace ContactMap3.ViewModels
                     zipCode = postalFilter(value);
                     OnPropertyChanged();
                     isValidPostal = matchPostal(zipCode);
-                    Console.WriteLine("Postal Code Checksout?" + (isValidPostal?"True":"False"));
+                    Console.WriteLine("Postal Code Checksout?" + (isValidPostal ? "True" : "False"));
 
                 }
             }
@@ -204,5 +236,30 @@ namespace ContactMap3.ViewModels
                 }
             }
         }
+
+        public ICommand SaveContactCommand => new Command(SaveContact);
+        private async void SaveContact()
+        {
+            if (IsValid(person))
+            {
+                if (isUpdate)
+                {
+                    Console.WriteLine("Update");
+                    MessagingCenter.Send<ModifyContactViewModel, Person>(this, "UpdateItem", person);
+                }
+                else
+                {
+                    Console.WriteLine("New Item");
+                    MessagingCenter.Send<ModifyContactViewModel, Person>(this, "AddItem", person);
+                }
+                await Shell.Current.GoToAsync($"contacts");
+            }
+        }
+
+        private bool IsValid(Person person)
+        {
+            return true; //should check stuff Better
+        }
+        
     }
 }

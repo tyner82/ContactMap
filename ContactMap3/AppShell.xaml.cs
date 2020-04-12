@@ -28,6 +28,7 @@ namespace ContactMap3
         {
             routes.Add("contactdetails", typeof(ContactsDetailPage));
             routes.Add("modifycontact", typeof(ModifyContactPage));
+            routes.Add("contacts", typeof(ContactsPage));
 
             foreach (var item in routes)
             {

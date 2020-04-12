@@ -12,18 +12,20 @@ namespace ContactMap3.Views
     [QueryProperty("UId", "uid")]
     public partial class ModifyContactPage : ContentPage
     {
-        Person person;
+        string uid;
         public ModifyContactPage()
         {
             InitializeComponent();
             BindingContext = new ModifyContactViewModel();
         }
-
         public string UId
         {
+            get { return uid; }
             set
             {
-                person = ContactsData.Contacts.FirstOrDefault(p => p.Id == Uri.UnescapeDataString(value));
+                Console.WriteLine("Modify contact got uid, sending to page model");
+                uid = Uri.UnescapeDataString(value);
+                MessagingCenter.Send<ModifyContactPage, string>(this, "uid", uid);
             }
         }
 
