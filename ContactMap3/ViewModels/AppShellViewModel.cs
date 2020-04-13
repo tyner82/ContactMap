@@ -11,28 +11,29 @@ namespace ContactMap3.ViewModels
         Dictionary<string, Type> routes = new Dictionary<string, Type>();
         public Dictionary<string, Type> Routes { get { return routes; } }
         bool firstRun = true;
-        string[] filtered;
-
+        //string[] filtered;
+        public string[] Filtered { get; set; }
         public AppShellViewModel()
         {
             if (firstRun)
             {
                 RegisterRoutes();
 
+                // Moved this to Contacts, condensed to one subscriber
+                //MessagingCenter.Subscribe<ContactsDetailPage, string>(this, "uid", (sender, arg) =>
+                //{
+                //    Console.WriteLine($"New Filter Item\nlocation:{this.GetHashCode()}");
+                //    Console.WriteLine($"UID: {arg}");
+                //    Filtered = new string[] { arg };
+                //    Console.WriteLine($"Saved in Filtered{Filtered[0]}");
 
-                MessagingCenter.Subscribe<ContactsDetailPage, string>(this, "uid", (sender, arg) =>
-                {
-                    Console.WriteLine($"New Filter Item\nlocation:{this.GetHashCode()}");
-                    filtered = new string[] { arg };
+                //});
 
-                });
-
-                MessagingCenter.Subscribe<MapPage, string>(this, "uid", (sender, arg) =>
-                {
-                    Console.WriteLine($"New Filter Item\nlocation:{this.GetHashCode()}");
-                    filtered = new string[] { arg };
-
-                });
+                //MessagingCenter.Subscribe<MapViewModel>(this, "SendContacts", (sender) =>
+                //{
+                //    Console.WriteLine($"Got Request,\n Filtered={0}\nLength: {1}",Filtered[0],Filtered.Length);
+                //    //MessagingCenter.Send(this, "contacts", filtered);
+                //});
                 firstRun = false;
             };
         }

@@ -3,9 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:data="clr-namespace:ContactMap3.Data"
              xmlns:viewmodel="clr-namespace:ContactMap3.ViewModels"
+             xmlns:behaviors="clr-namespace:Behaviors;assembly=Behaviors"
              x:Class="ContactMap3.Views.ContactsPage"
              Title="Contacts">
     
+    <ContentPage.Behaviors>
+        <behaviors:EventHandlerBehavior EventName="Disappearing">
+            <behaviors:InvokeCommandAction Command="{Binding OnDisappearingCommand}" />
+        </behaviors:EventHandlerBehavior>
+        <behaviors:EventHandlerBehavior EventName="Appearing">
+            <behaviors:InvokeCommandAction Command="{Binding OnAppearingCommand}" />
+        </behaviors:EventHandlerBehavior>
+    </ContentPage.Behaviors>
         <ContentPage.ToolbarItems>
             <ToolbarItem Text="+"
                          Order="Primary"
