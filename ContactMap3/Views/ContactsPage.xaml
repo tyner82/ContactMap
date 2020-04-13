@@ -7,10 +7,10 @@
              Title="Contacts">
     
         <ContentPage.ToolbarItems>
-    <ToolbarItem Text="+"
-                 Order="Primary"
-                 Priority="0"
-                 Command="{Binding AddContactCommand}" />
+            <ToolbarItem Text="+"
+                         Order="Primary"
+                         Priority="0"
+                         Command="{Binding AddContactCommand}" />
         </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView>

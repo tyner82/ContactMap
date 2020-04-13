@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using ContactMap3.ViewModels;
 using Xamarin.Forms;
 
 namespace ContactMap3.Views
@@ -11,11 +11,8 @@ namespace ContactMap3.Views
         public MapPage()
         {
             InitializeComponent();
-        }
-
-        protected override bool OnBackButtonPressed()
-        {
-            return base.OnBackButtonPressed();
+            BindingContext = new MapViewModel();
+            Console.WriteLine("Loaded Map");
         }
     }
 }

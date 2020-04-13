@@ -1,32 +1,27 @@
 ﻿using ContactMap3.ViewModels;
 using ContactMap3.Models;
 using Xamarin.Forms;
+using System;
 
 namespace ContactMap3.Views
 {
     public partial class ContactsPage : ContentPage
     {
-        public Person _SelectedItem;
+        ContactsViewModel vm;
+
+        //int FilterLimit { get; set; } = 10;
         public ContactsPage()
         {
             InitializeComponent();
+            //filtered = new string[FilterLimit];
+            BindingContext = vm = new ContactsViewModel();
+            //MessagingCenter.Subscribe<ContactsDetailViewModel, string[]>(this, "filtered", (sender, arg) =>
+            //{
 
-            BindingContext = new ContactsViewModel();
+            //    Console.WriteLine("Got a message Length" + arg.Length);
+            //    Console.WriteLine($"In ExecuteOnQuantityChangedCommand\nlocation:{this.GetHashCode()}");
+            //    filtered = arg;
+            //});
         }
-
-        void ToolbarItem_Clicked(System.Object sender, System.EventArgs e)
-        {
-        }        /* moved to viewmodel
-        public Person SelectedItem
-        {
-            get { return _SelectedItem; }
-            set { SetProperty(ref _SelectedItem, value); }
-        }
-        async void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-            string personName = (e.CurrentSelection.FirstOrDefault() as Person).Name;
-            await Shell.Current.GoToAsync($"contactdetails?name={personName}");
-        }*/
     }
 }

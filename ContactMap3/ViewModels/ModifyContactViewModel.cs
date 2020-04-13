@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using Android.Content.Res;
 using ContactMap3.Behaviors;
 using ContactMap3.Data;
 using ContactMap3.Models;
@@ -32,6 +34,7 @@ namespace ContactMap3.ViewModels
         string city;
         string id;
         bool isUpdate = false;
+        bool isDataSaved = false;
 
         public ModifyContactViewModel()
         {
@@ -44,6 +47,7 @@ namespace ContactMap3.ViewModels
             stateTitle = "Select a State";
             postalLabel = "Zip Code";
             isUpdate = false;
+            isDataSaved = false;
 
 
             MessagingCenter.Subscribe<ModifyContactPage, string>(this, "uid", (sender, arg) =>
@@ -168,6 +172,7 @@ namespace ContactMap3.ViewModels
                     zipCode = postalFilter(value);
                     OnPropertyChanged();
                     isValidPostal = matchPostal(zipCode);
+                    //TODO: implement verification of data
                     Console.WriteLine("Postal Code Checksout?" + (isValidPostal ? "True" : "False"));
 
                 }
@@ -252,14 +257,15 @@ namespace ContactMap3.ViewModels
                     Console.WriteLine("New Item");
                     MessagingCenter.Send<ModifyContactViewModel, Person>(this, "AddItem", person);
                 }
-                await Shell.Current.GoToAsync($"contacts");
+                isDataSaved = true;
+                await Shell.Current.Navigation.PopToRootAsync();
             }
         }
 
         private bool IsValid(Person person)
         {
-            return true; //should check stuff Better
+            return true; //TODO: should check stuff Better
         }
-        
+
     }
 }

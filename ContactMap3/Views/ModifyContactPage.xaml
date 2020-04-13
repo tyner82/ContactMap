@@ -5,10 +5,6 @@
              xmlns:viewmodel="clr-namespace:ContactMap3.ViewModels"
              x:Class="ContactMap3.Views.ModifyContactPage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Back"
-                        Order="Primary"
-                        Priority="0"
-                        Command="{Binding AddContactCommand}" />
         <ToolbarItem Text="Save"
                         Order="Primary"
                         Priority="0"

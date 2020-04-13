@@ -12,8 +12,6 @@ namespace ContactMap3.ViewModels
     {
 
         Person person;
-        string name;
-        string street;
 
         public ContactsDetailViewModel()
         {
@@ -25,6 +23,8 @@ namespace ContactMap3.ViewModels
                 
             });
         }
+
+
         public Person Person
         {
             get { return person; }
@@ -33,20 +33,11 @@ namespace ContactMap3.ViewModels
                 if (person != value)
                 {
                     person = value;
+                    //MessagingCenter.Send<ContactsDetailViewModel, string[]>(this, "filtered", new string[] { person.Id });
                     OnPropertyChanged();
                 }
             }
         }
-            //<Label Text = "{Binding Name}"
-            //       HorizontalOptions="Center" />
-            //<Label Text = "{Binding Street}"
-            //       HorizontalOptions="Center" />
-            //<Label Text = "{Binding City}"
-            //       HorizontalOptions="Center" />
-            //<Label Text = "{Binding State}"
-            //       HorizontalOptions="Center" />
-            //<Label Text = "{Binding ZipCode}"
-            //       HorizontalOptions="Center" />
 
         public ICommand ModifyContactCommand => new Command(ModifyContact);
         private async void ModifyContact()

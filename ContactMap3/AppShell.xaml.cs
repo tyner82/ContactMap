@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Essentials;
 using ContactMap3.Views;
+using ContactMap3.ViewModels;
 
 namespace ContactMap3
 {
@@ -15,25 +12,11 @@ namespace ContactMap3
     [DesignTimeVisible(false)]
     public partial class AppShell : Shell
     {
-        Dictionary<string, Type> routes = new Dictionary<string, Type>();
-        public Dictionary<string, Type> Routes { get { return routes; } }
-
         public AppShell()
         {
             InitializeComponent();
-            RegisterRoutes();
-            BindingContext = this;
+            BindingContext = new AppShellViewModel();
         }
-        void RegisterRoutes()
-        {
-            routes.Add("contactdetails", typeof(ContactsDetailPage));
-            routes.Add("modifycontact", typeof(ModifyContactPage));
-            routes.Add("contacts", typeof(ContactsPage));
-
-            foreach (var item in routes)
-            {
-                Routing.RegisterRoute(item.Key, item.Value);
-            }
-        }
+        
     }
 }
