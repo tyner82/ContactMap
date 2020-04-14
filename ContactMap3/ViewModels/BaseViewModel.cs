@@ -9,7 +9,7 @@ namespace ContactMap3.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Person> DataStore => new MockPersonStore();
+        public IContactStore<Person> DataStore => new PersonDataStore();
 
         bool isBusy = false;
         public bool IsBusy

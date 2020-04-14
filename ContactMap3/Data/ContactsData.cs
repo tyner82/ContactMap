@@ -7,7 +7,7 @@ namespace ContactMap3.Data
 {
     public static class ContactsData
     {
-        public static IList<Person> Contacts { get; private set; }
+        public static IList<Person> Contacts { get; set; }
         //public static string SelectedItem=null;
         static ContactsData()
         {
