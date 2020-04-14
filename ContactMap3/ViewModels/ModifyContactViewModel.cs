@@ -50,11 +50,11 @@ namespace ContactMap3.ViewModels
             isDataSaved = false;
 
 
-            MessagingCenter.Subscribe<ModifyContactPage, string>(this, "uid", (sender, arg) =>
+            MessagingCenter.Subscribe<ModifyContactPage, string>(this, "uid", async (sender, arg) =>
             {
                 if (arg != "0")
                 {
-                    person = ContactsData.Contacts.FirstOrDefault(p => p.Id == arg);
+                    person = await DataStore.GetItemAsync(arg);// ContactsData.Contacts.FirstOrDefault(p => p.Id == arg);
                     id = person.Id;
                     Name = person.Name;
                     FiltPhone = person.Phone;

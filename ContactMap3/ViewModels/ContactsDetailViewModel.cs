@@ -16,10 +16,10 @@ namespace ContactMap3.ViewModels
         public ContactsDetailViewModel()
         {
             
-            MessagingCenter.Subscribe<ContactsDetailPage, string>(this, "uid", (sender,arg)=>
+            MessagingCenter.Subscribe<ContactsDetailPage, string>(this, "uid", async (sender,arg)=>
             {
 
-                Person = ContactsData.Contacts.FirstOrDefault(p => p.Id == arg);
+                Person = await DataStore.GetItemAsync(arg);
                 
             });
         }

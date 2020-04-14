@@ -16,7 +16,7 @@
         <ScrollView>
             <CollectionView Margin="20"
                             x:DataType="viewmodel:ContactsViewModel"
-                            ItemsSource="{x:Static data:ContactsData.Contacts}"
+                            ItemsSource="{Binding Contacts}"
                             ItemTemplate="{StaticResource ContactTemplate}"
                             SelectionMode="Single"
                             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"

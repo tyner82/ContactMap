@@ -4,12 +4,13 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ContactMap3.Data;
 using ContactMap3.Models;
+using Xamarin.Forms;
 
 namespace ContactMap3.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Person> DataStore => new MockPersonStore();
+        public IContactStore<Person> DataStore => DependencyService.Get<IContactStore<Person>>()?? new PersonDataStore();
 
         bool isBusy = false;
         public bool IsBusy

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using ContactMap3.Models;
@@ -6,8 +7,10 @@ using Xamarin.Forms;
 
 namespace ContactMap3.ViewModels
 {
-    public class ContactsViewModel: BaseViewModel
+    public class ContactsViewModel : BaseViewModel
     {
+        public List<Person> Contacts{ get; private set; }
+
         public Person selectedItem;
 
         public Person SelectedItem
@@ -19,6 +22,25 @@ namespace ContactMap3.ViewModels
             }
         }
 
+        public ContactsViewModel()
+        {
+            MessagingCenter.Subscribe<ModifyContactViewModel, Person>(this, "AddItem", (sender, person) =>
+            {
+                try
+                {
+                    //Console.WriteLine($"Add {person.Name}");
+                    DataStore.AddItemAsync(person);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Exception trying to add to Store:{e}");
+                }
+            });
+            MessagingCenter.Subscribe<ModifyContactViewModel, Person>(this, "UpdateItem", (sender, person) =>
+            {
+                DataStore.UpdateItemAsync(person);
+            });
+        }
 
         public ICommand SelectionCommand => new Command(ItemSelected);
         private async void ItemSelected()
