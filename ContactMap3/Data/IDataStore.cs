@@ -10,6 +10,6 @@ namespace ContactMap3.Data
         Task<bool> UpdateItemAsync(T item);
         Task<bool> DeleteItemAsync(string id);
         Task<T> GetItemAsync(string id);
-        Task<IEnumerable<T>> GetItemAsync(bool forceRefresh = true);
+        Task<IEnumerable<T>> GetItemsAsync(bool forceRefresh = true);
     }
 }

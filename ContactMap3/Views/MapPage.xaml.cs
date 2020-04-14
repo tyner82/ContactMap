@@ -11,7 +11,7 @@ namespace ContactMap3.Views
         public MapPage()
         {
             InitializeComponent();
-            BindingContext = new MapViewModel();
+            BindingContext = new MapViewModel(map);
             Console.WriteLine("Loaded Map");
         }
     }

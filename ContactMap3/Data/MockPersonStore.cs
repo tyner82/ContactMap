@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using ContactMap3.Models;
 
 namespace ContactMap3.Data
 {
-    public class MockDataStore : IDataStore<Person>
+    public class MockPersonStore : IDataStore<Person>
     {
         public readonly IList<Person> Contacts;
 
-        public MockDataStore()
+        public MockPersonStore()
         {
             Contacts = ContactsData.Contacts;
 
         }
-
         public async Task<bool> AddItemAsync(Person person)
         {
             Contacts.Add(person);
@@ -42,7 +43,7 @@ namespace ContactMap3.Data
             return await Task.FromResult(Contacts.FirstOrDefault(s => s.Id == id));
         }
 
-        public async Task<IEnumerable<Person>> GetItemAsync(bool forceRefresh = true)
+        public async Task<IEnumerable<Person>> GetItemsAsync(bool forceRefresh = true)
         {
             return await Task.FromResult(Contacts);
         }

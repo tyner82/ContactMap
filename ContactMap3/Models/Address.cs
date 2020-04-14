@@ -8,5 +8,13 @@
         public string State { get; set; }
         public string Postal { get; set; }
         public string Country { get; set; }
+        public override string ToString()
+        {
+            return $"{this.Number} "+
+                $"{this.Street} " +
+                $"{this.City} " +
+                $"{this.State} " +
+                $"{this.Country}";
+        }
     }
 }

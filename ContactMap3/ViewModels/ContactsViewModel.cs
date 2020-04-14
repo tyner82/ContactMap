@@ -13,7 +13,10 @@ namespace ContactMap3.ViewModels
         public Person SelectedItem
         {
             get { return selectedItem; }
-            set { SetProperty(ref selectedItem, value); }
+            set
+            {
+                SetProperty(ref selectedItem, value);
+            }
         }
 
 
@@ -23,6 +26,9 @@ namespace ContactMap3.ViewModels
             if (SelectedItem != null)
             {
                 string personId = SelectedItem.Id;
+
+                Application.Current.Properties["id"] = new string[] { personId }; //I know not best way to do this
+
                 await Shell.Current.GoToAsync($"contactdetails?uid={personId}");
                 SelectedItem = null;
             }
