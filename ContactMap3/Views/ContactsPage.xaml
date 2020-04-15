@@ -13,7 +13,7 @@
                          Command="{Binding AddContactCommand}" />
         </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <ScrollView>
+        <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}" Command="{Binding UpdateContactsCommand}">
             <CollectionView Margin="20"
                             x:DataType="viewmodel:ContactsViewModel"
                             ItemsSource="{Binding Contacts}"
@@ -21,7 +21,7 @@
                             SelectionMode="Single"
                             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                             SelectionChangedCommand="{Binding SelectionCommand}" />
-        </ScrollView>
+        </RefreshView>
     </ContentPage.Content>
 
 

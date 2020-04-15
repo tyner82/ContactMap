@@ -32,7 +32,7 @@ namespace ContactMap3.ViewModels
         string name;
         string street;
         string city;
-        string id;
+        string id = "0";
         bool isUpdate = false;
         bool isDataSaved = false;
 
@@ -69,6 +69,34 @@ namespace ContactMap3.ViewModels
 
                 //Console.WriteLine("@ modifyviewmodel" + arg);
             });
+        }
+
+        string[] UnCombine(string street)
+        {
+            var parts = street.Split(" "[0]);
+            string number = parts[0];
+            street = street.TrimStart((number + " ").ToCharArray());
+            string[] result = new string[2] { number, street };
+            return result;
+        }
+
+        Person BuildPerson()
+        {
+            Address address = new Address();
+            address.Number = UnCombine(Street)[0];
+            address.Street = UnCombine(Street)[1];
+            address.City = City;
+            address.State = SelectedStateName;
+            address.Postal = ZipCode;
+            address.Country = selectedCountryName;
+            Console.WriteLine($"Created address{ address.ToString()}");
+            Person person = new Person();
+            person.Id = id;
+            person.Name = Name;
+            person.Phone = FiltPhone;
+            person.Address=address;
+            Console.WriteLine($"Created Person {person.ToString()}");
+            return person;
         }
 
         public string FiltPhone
@@ -190,25 +218,33 @@ namespace ContactMap3.ViewModels
                     OnPropertyChanged();
                     if (value == AddressData.Countries[0])
                     {
-                        States = AddressData.States;
-                        matchPostal = x => true;
-                        postalFilter = new Filter(FilterFunctions.ZipCodesFilter);
-                        ZipCode = "";
-                        SelectedStateName = "";
-                        ZipPlace = "12345";
-                        StateTitle = "Select a State";
-                        PostalLabel = "Zip Code";
+                        //TODO fix State disappearing
+                        if (States != AddressData.States)
+                        {
+                            States = AddressData.States;
+                            matchPostal = x => true;
+                            postalFilter = new Filter(FilterFunctions.ZipCodesFilter);
+                            ZipCode = "";
+
+                            SelectedStateName = "";
+                            ZipPlace = "12345";
+                            StateTitle = "Select a State";
+                            PostalLabel = "Zip Code";
+                        }
                     }
                     else
                     {
-                        States = AddressData.Provinces;
-                        matchPostal = x => FilterFunctions.MatchesPostalCode(x);
-                        postalFilter = new Filter(FilterFunctions.PostalCodesFilter);
-                        ZipCode = "";
-                        SelectedStateName = "";
-                        ZipPlace = "A0A 1B1";
-                        StateTitle = "Select a Province";
-                        PostalLabel = "Postal Code";
+                        if (States != AddressData.Provinces)
+                        {
+                            States = AddressData.Provinces;
+                            matchPostal = x => FilterFunctions.MatchesPostalCode(x);
+                            postalFilter = new Filter(FilterFunctions.PostalCodesFilter);
+                            ZipCode = "";
+                            SelectedStateName = "";
+                            ZipPlace = "A0A 1B1";
+                            StateTitle = "Select a Province";
+                            PostalLabel = "Postal Code";
+                        }
                     }
                 }
             }
@@ -218,14 +254,22 @@ namespace ContactMap3.ViewModels
         {
 
             get { return countries; }
-            private set { countries = value; OnPropertyChanged(); }
+            private set
+            {
+                countries = value;
+                //OnPropertyChanged();
+            }
         }
 
 
         public List<string> States
         {
             get { return states; }
-            private set { states = value; OnPropertyChanged(); }
+            private set
+            {
+                    states = value;
+                    OnPropertyChanged();
+            }
         }
 
         public string SelectedStateName
@@ -245,6 +289,7 @@ namespace ContactMap3.ViewModels
         public ICommand SaveContactCommand => new Command(SaveContact);
         private async void SaveContact()
         {
+            person = BuildPerson();
             if (IsValid(person))
             {
                 if (isUpdate)

@@ -46,10 +46,6 @@ namespace ContactMap3.ViewModels
 
         async Task ExecuteLoadContacts()
         {
-            Console.WriteLine("Invocation Must have work LoadContactsCommand");
-            if (IsBusy)
-                return;
-            IsBusy = true;
 
             if (Application.Current.Properties.ContainsKey("id"))
             {
@@ -59,7 +55,7 @@ namespace ContactMap3.ViewModels
             try
             {
                 Contacts.Clear();
-                Console.WriteLine($"Contacts.Clear succeeded ArrayIds:/n{currentIds}");
+                //Console.WriteLine($"Contacts.Clear succeeded ArrayIds:/n{currentIds}");
                 if (currentIds != null)
                 {
                     foreach (string id in currentIds)
@@ -98,18 +94,20 @@ namespace ContactMap3.ViewModels
 
         private async Task populateMap(List<Person> people)
         {
+            mapLocsProperties.Clear();
+            mapRef.Pins.Clear();
+            double avgLat = 0;
+            double avgLong = 0;
+            double minLat = 90;
+            double maxLat = -90;
+            double minLong = 180;
+            double maxLong = -180;
             foreach (Person person in people)
             {
             //Person person = await DataStore.GetItemAsync(ids[0]);
 
             //Person person = people.FirstOrDefault(p => p.Id == id);
                 string address = person.Address.ToString();
-                double avgLat=0;
-                double avgLong=0;
-                double minLat = 90;
-                double maxLat = -90;
-                double minLong = 180;
-                double maxLong = -180;
                 try
                 {
 
@@ -120,8 +118,16 @@ namespace ContactMap3.ViewModels
                         Position = new Position(location.Latitude, location.Longitude),
                         Label = person.Name
                     };
-                    avgLat += location.Latitude;
-                    avgLong += location.Longitude;
+                    if (location.Latitude > maxLat)
+                        maxLat = location.Latitude;
+                    if (location.Latitude < minLat)
+                        minLat = location.Latitude;
+                    if (location.Latitude > maxLong)
+                        maxLong = location.Longitude;
+                    if (location.Latitude < minLong)
+                        minLong = location.Longitude;
+                    //avgLat += location.Latitude;
+                    //avgLong += location.Longitude;
                     mapRef.Pins.Add(apin);
                     mapLocsProperties.Add(new MapLocation(address, person.Name, new Position(location.Latitude, location.Longitude)));
                     //TODO Map by name
@@ -130,14 +136,17 @@ namespace ContactMap3.ViewModels
                 {
                     Console.WriteLine($"Exception:{ex} Outside Geocoding");
                 }
-
-                avgLat /= mapLocsProperties.Count;
-                avgLong /= mapLocsProperties.Count;
-                Console.WriteLine($"{avgLat}, {avgLong}");
-                //new Position(avgLat, avgLong);
-                mapRef.MoveToRegion(MapSpan.FromCenterAndRadius(mapLocsProperties[0].Position, Distance.FromKilometers(50* mapLocsProperties.Count)));
-                //Console.WriteLine($"Check Formating: \n{address}");
+                
             }
+            var dist = Location.CalculateDistance(maxLat, maxLong, minLat, minLong, DistanceUnits.Kilometers) / 2;
+            avgLat = (maxLat - minLat) / 2 + minLat;
+            avgLong = (maxLong - minLong) / 2 + minLong;
+            //avgLat /= mapLocsProperties.Count;
+            //avgLong /= mapLocsProperties.Count;
+            Console.WriteLine($"{avgLat}, {avgLong}, {mapLocsProperties.Count}");
+            //new Position(avgLat, avgLong);mapLocsProperties[0].Position
+            mapRef.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(avgLat, avgLong), Distance.FromKilometers(dist>20?dist:20)));
+            //Console.WriteLine($"Check Formating: \n{address}");
         }
 
         async Task<Location> GeocodeThis(string address)
@@ -152,10 +161,10 @@ namespace ContactMap3.ViewModels
                     Console.WriteLine($"ManyLocations, {locations.Count()}");
                 }
                 location = locations?.FirstOrDefault();
-                //if (location != null)
-                //{
-                //    Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
-                //}
+                if (location != null)
+                {
+                    Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
+                }
             }
             catch (FeatureNotSupportedException fnsEx)
             {

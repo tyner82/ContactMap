@@ -10,7 +10,7 @@ namespace ContactMap3.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IContactStore<Person> DataStore => DependencyService.Get<IContactStore<Person>>()?? new PersonDataStore();
+        public IContactStore<Person> DataStore => DependencyService.Get<PersonDataStore>();
 
         bool isBusy = false;
         public bool IsBusy

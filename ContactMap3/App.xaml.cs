@@ -7,7 +7,7 @@ namespace ContactMap3
 {
     public partial class App : Application
     {
-        public bool UseMockDataStore;
+        public bool UseMockDataStore = true;
         public App()
         {
             InitializeComponent();

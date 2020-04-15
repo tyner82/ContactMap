@@ -3,23 +3,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ContactMap3.Data;
 using ContactMap3.Models;
 using Newtonsoft.Json;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace ContactMap3.Data
 {
     public class PersonDataStore : IContactStore<Person>
     {
-        List<Person> contacts;
+        readonly List<Person> contacts;
 
         string fileName = "contacts.json";
 
+        public PersonDataStore(List<Person> rebuildCache)
+        {
+            Console.WriteLine("Rebuilt DataStore from cache");
+            contacts = rebuildCache;
+        }
+
         public PersonDataStore()
         {
+            Console.WriteLine($"New DataStore Created...{this.GetHashCode()}");
             contacts = new List<Person>();
-
+            //List<Person> _ontacts = new List<Person>();
             contacts.Add(new Person
             {
                 Id = Guid.NewGuid().ToString(),
@@ -65,12 +72,17 @@ namespace ContactMap3.Data
                     Street = "Wellington St"
                 }
             });
+            //foreach(Person p in _ontacts)
+            //{
+            //    contacts.Add(p);
+            //}
         }
 
         public async Task<bool> AddItemAsync(Person person)
         {
             person.Id = Guid.NewGuid().ToString();
             contacts.Add(person);
+            Console.WriteLine($"Says it wrote something, Count = {contacts.Count}\n Has: {this.GetHashCode()}");
             return await Task.FromResult(true);
         }
 
@@ -107,7 +119,7 @@ namespace ContactMap3.Data
             Console.WriteLine($"Cache file path:\n{cacheFile}");
             try
             {
-                using (var writer = File.CreateText(cacheFile))
+                using (var writer = File.CreateText(cacheFile))//TODO: Does this overwrite?
                 {
                     await writer.WriteLineAsync(JsonConvert.SerializeObject(contacts));
                 }
@@ -154,7 +166,7 @@ namespace ContactMap3.Data
             }
             Console.WriteLine($"Deserializing Json:{contacts[0].Name}");
             List<Person> result = JsonConvert.DeserializeObject<List<Person>>(rawContacts);
-            contacts = result; //maybe shouldn't touch this here?
+            //contacts = result; //maybe shouldn't touch this here?
             return await Task.FromResult(result);
         }
     }

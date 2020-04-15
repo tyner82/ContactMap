@@ -1,0 +1,63 @@
+﻿using System;
+using ContactMap3.ViewModels;
+
+namespace ContactMap3.Models
+{
+    public class Person: BaseViewModel
+    {
+        public string Id
+        {
+            get => Id;
+            set
+            {
+                if (Id != value)
+                {
+                    Id = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public string Name
+        {
+            get => Name;
+            set
+            {
+                if (Name != value)
+                {
+                    Name = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public Address Address
+        {
+            get => Address;
+            set
+            {
+                if (Address != value)
+                {
+                    Address = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public string Phone
+        {
+            get => Phone;
+            set
+            {
+                if (Phone != value)
+                {
+                    Phone = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public override string ToString()
+        {
+
+            return $"{Name} {Phone}";
+        }
+    }
+}

@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using ContactMap3.Models;
+using ContactMap3.Views;
 using Xamarin.Forms;
 
 namespace ContactMap3.ViewModels
 {
     public class ContactsViewModel : BaseViewModel
     {
-        public List<Person> Contacts{ get; private set; }
+        public ObservableCollection<Person> Contacts { get; set; }
 
         public Person selectedItem;
 
@@ -22,23 +25,36 @@ namespace ContactMap3.ViewModels
             }
         }
 
-        public ContactsViewModel()
+        public ContactsViewModel(ContactsPage AContactsPage)
         {
-            MessagingCenter.Subscribe<ModifyContactViewModel, Person>(this, "AddItem", (sender, person) =>
+            Contacts = new ObservableCollection<Person>();
+            MessagingCenter.Subscribe<ModifyContactViewModel, Person>(this, "AddItem", async (sender, person) =>
             {
                 try
                 {
-                    //Console.WriteLine($"Add {person.Name}");
-                    DataStore.AddItemAsync(person);
+                    var _person = person as Person;
+                    Contacts.Add(_person);
+                    Contacts.Clear();
+                    List<Person> _contacts = Contacts.ToList();
+                    _contacts = _contacts.OrderBy(o => o.Name).ToList();
+                    foreach (Person p in _contacts)
+                    {
+                        Contacts.Add(p);
+                    }
+                    Console.WriteLine($"Add {person.Name}");
+                    await DataStore.AddItemAsync(_person);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine($"Exception trying to add to Store:{e}");
                 }
+
             });
-            MessagingCenter.Subscribe<ModifyContactViewModel, Person>(this, "UpdateItem", (sender, person) =>
+            MessagingCenter.Subscribe<ModifyContactViewModel, Person>(this, "UpdateItem", async (sender, person) =>
             {
-                DataStore.UpdateItemAsync(person);
+                await DataStore.UpdateItemAsync(person);
+
+                //this.UpdateContactsCommand.Execute(null);
             });
         }
 
@@ -53,6 +69,39 @@ namespace ContactMap3.ViewModels
 
                 await Shell.Current.GoToAsync($"contactdetails?uid={personId}");
                 SelectedItem = null;
+            }
+        }
+
+        public ICommand UpdateContactsCommand => new Command(async () => await UpdateContact());
+        async Task UpdateContact()
+        {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+            Console.WriteLine("UpdateContacts");
+
+            try
+            {
+                Contacts.Clear();
+                var _items = await DataStore.GetItemsAsync(true);
+                List<Person> _contacts = _items.ToList();
+                _contacts = _contacts.OrderBy(o => o.Name).ToList();
+                foreach (Person p in _contacts)
+                {
+                    Contacts.Add(p);
+                }
+                //Console.WriteLine($"Add {person.Name}");
+                //await DataStore.AddItemAsync(_person);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine($"Caught Exception while Refreshing View:{e}");
+            }
+            finally
+            {
+                IsBusy = false;
+                Console.WriteLine("IsBusy falsed");
             }
         }
 

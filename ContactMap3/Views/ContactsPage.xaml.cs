@@ -13,7 +13,16 @@ namespace ContactMap3.Views
         public ContactsPage()
         {
             InitializeComponent();
-            BindingContext = vm = new ContactsViewModel();
+            BindingContext = vm = new ContactsViewModel(this);
         }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (vm.Contacts.Count == 0)
+                vm.UpdateContactsCommand.Execute(null);
+            Application.Current.Properties.Remove("id");
+        }
+
     }
 }
