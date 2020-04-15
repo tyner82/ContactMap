@@ -3,9 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:data="clr-namespace:ContactMap3.Data"
              xmlns:viewmodel="clr-namespace:ContactMap3.ViewModels"
+             xmlns:behaviors="clr-namespace:Behaviors;assembly=Behaviors"
              x:Class="ContactMap3.Views.ContactsPage"
              Title="Contacts">
-    
+        <ContentPage.Behaviors>
+		    <behaviors:EventHandlerBehavior EventName="Appearing">
+			    <behaviors:InvokeCommandAction Command="{Binding PageAppearingCommand}" />
+		    </behaviors:EventHandlerBehavior>
+            
+	    </ContentPage.Behaviors>
         <ContentPage.ToolbarItems>
             <ToolbarItem Text="Sync"
                          Order="Primary"
@@ -28,7 +34,8 @@
                             ItemTemplate="{StaticResource ContactTemplate}"
                             SelectionMode="Single"
                             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                            SelectionChangedCommand="{Binding SelectionCommand}" />
+                            SelectionChangedCommand="{Binding SelectionCommand}">
+            </CollectionView>
         </RefreshView>
     </ContentPage.Content>
 

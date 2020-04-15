@@ -15,9 +15,9 @@ namespace ContactMap3.ViewModels
     {
         string[] currentIds;
         List<Person> Contacts { get; set; }
-        public ICommand LoadContactsCommand { get; private set; }
+        //public ICommand LoadContactsCommand { get; private set; }
         public ICommand PageAppearingCommand { get; private set; }
-        public ICommand PageDisappearingCommand { get; private set; }
+        //public ICommand PageDisappearingCommand { get; private set; }
         List<Location> locs;
         List<MapLocation> mapLocsProperties;
         Xamarin.Forms.Maps.Map mapRef;
@@ -28,14 +28,15 @@ namespace ContactMap3.ViewModels
             Contacts = new List<Person>();
             PageAppearingCommand = new Command(async () => await ExecuteLoadContacts());
             //PageAppearingCommand = new Command(OnPageAppearing);
-            PageDisappearingCommand = new Command(OnPageDisappearing);
+            //PageDisappearingCommand = new Command(OnPageDisappearing);
             locs = new List<Location>();
-            mapLocsProperties = new List<MapLocation> ();
-            if (Application.Current.Properties.ContainsKey("id"))
-            {
-                currentIds = Application.Current.Properties["id"] as string[];
+            mapLocsProperties = new List<MapLocation>();
+            //if (Application.Current.Properties.ContainsKey("id"))
+            //{
+            //    Console.WriteLine("Map Constructor Contains id");
+            //    currentIds = Application.Current.Properties["id"] as string[];
 
-            }
+            //}
 
 
         }
@@ -52,10 +53,16 @@ namespace ContactMap3.ViewModels
                 currentIds = Application.Current.Properties["id"] as string[];
 
             }
+            else
+            {
+                currentIds = null;
+            }
             try
             {
                 Contacts.Clear();
-                //Console.WriteLine($"Contacts.Clear succeeded ArrayIds:/n{currentIds}");
+                Console.WriteLine($"Current Ids = ArrayIds:\n{currentIds}");
+
+                //TODO: Apply Filters
                 if (currentIds != null)
                 {
                     foreach (string id in currentIds)
@@ -69,6 +76,7 @@ namespace ContactMap3.ViewModels
                 }
                 else
                 {
+
                     var result = await DataStore.GetItemsAsync(true);
                     foreach(Person p in result)
                     {
@@ -78,10 +86,12 @@ namespace ContactMap3.ViewModels
                 }
 
             }
+
             catch(Exception e)
             {
                 Console.WriteLine($"Caught this error Loading Contacts from mockstore:\n{e}");
             }
+
             finally
             {
                 Console.WriteLine(Contacts);
@@ -122,9 +132,9 @@ namespace ContactMap3.ViewModels
                         maxLat = location.Latitude;
                     if (location.Latitude < minLat)
                         minLat = location.Latitude;
-                    if (location.Latitude > maxLong)
+                    if (location.Longitude > maxLong)
                         maxLong = location.Longitude;
-                    if (location.Latitude < minLong)
+                    if (location.Longitude < minLong)
                         minLong = location.Longitude;
                     //avgLat += location.Latitude;
                     //avgLong += location.Longitude;
@@ -141,6 +151,10 @@ namespace ContactMap3.ViewModels
             var dist = Location.CalculateDistance(maxLat, maxLong, minLat, minLong, DistanceUnits.Kilometers) / 2;
             avgLat = (maxLat - minLat) / 2 + minLat;
             avgLong = (maxLong - minLong) / 2 + minLong;
+
+            Console.WriteLine("{maxLat}, {minLat}, {maxLong}, {minLong}, {dist}, {avgLat}, {avgLong}");
+            Console.WriteLine($"{maxLat}, {minLat}, {maxLong}, {minLong}, {dist}, {avgLat}, {avgLong}");
+
             //avgLat /= mapLocsProperties.Count;
             //avgLong /= mapLocsProperties.Count;
             Console.WriteLine($"{avgLat}, {avgLong}, {mapLocsProperties.Count}");

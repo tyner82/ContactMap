@@ -12,11 +12,19 @@ namespace ContactMap3.ViewModels
     {
         public IContactStore<Person> DataStore => DependencyService.Get<PersonDataStore>();
 
+        bool isDirty = false;
         bool isBusy = false;
+
         public bool IsBusy
         {
             get { return isBusy; }
             set { SetProperty(ref isBusy, value); }
+        }
+
+        public bool IsDirty
+        {
+            get { return isDirty; }
+            set { SetProperty(ref isDirty, value); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

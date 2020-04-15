@@ -1,6 +1,7 @@
 ﻿using ContactMap3.ViewModels;
 using ContactMap3.Models;
 using Xamarin.Forms;
+using Xamarin.Essentials;
 using System;
 
 namespace ContactMap3.Views
@@ -13,16 +14,17 @@ namespace ContactMap3.Views
         public ContactsPage()
         {
             InitializeComponent();
-            BindingContext = vm = new ContactsViewModel();
+            BindingContext = vm = new ContactsViewModel(this);
         }
 
         protected override void OnAppearing()
         {
-            Console.WriteLine("ContactsListAppearing");
-            Application.Current.Properties.Remove("id");
             base.OnAppearing();
-            if (vm.Contacts.Count == 0)
-                vm.UpdateContactsCommand.Execute(null);
+        }
+        protected override void OnBindingContextChanged()
+        {
+
+            base.OnBindingContextChanged();
         }
 
     }

@@ -12,6 +12,7 @@ namespace ContactMap3.ViewModels
 {
     public class ContactsViewModel : BaseViewModel
     {
+        ContactsPage Source;
         public ObservableCollection<Person> Contacts { get; set; }
 
         public Person selectedItem;
@@ -25,24 +26,26 @@ namespace ContactMap3.ViewModels
             }
         }
 
-        public ContactsViewModel()
+        public ContactsViewModel(ContactsPage source)
         {
+            Source = source;
             Contacts = new ObservableCollection<Person>();
             MessagingCenter.Subscribe<ModifyContactViewModel, Person>(this, "AddItem", async (sender, person) =>
             {
                 try
                 {
-                    var _person = person as Person;
-                    Contacts.Add(_person);
-                    Contacts.Clear();
-                    List<Person> _contacts = Contacts.ToList();
-                    _contacts = _contacts.OrderBy(o => o.Name).ToList();
-                    foreach (Person p in _contacts)
-                    {
-                        Contacts.Add(p);
-                    }
-                    Console.WriteLine($"Add {person.Name}");
-                    await DataStore.AddItemAsync(_person);
+                    //IsDirty = true;
+                    //var _person = person as Person;
+                    //Contacts.Add(_person);
+                    //Contacts.Clear();
+                    //List<Person> _contacts = Contacts.ToList();
+                    //_contacts = _contacts.OrderBy(o => o.Name).ToList();
+                    //foreach (Person p in _contacts)
+                    //{
+                    //    Contacts.Add(p);
+                    //}
+                    //Console.WriteLine($"Add {person.Name}");
+                    await DataStore.AddItemAsync(person);
                 }
                 catch (Exception e)
                 {
@@ -50,9 +53,16 @@ namespace ContactMap3.ViewModels
                 }
 
             });
+            //This Could need update if User changes data that is visible in contacts list
             MessagingCenter.Subscribe<ModifyContactViewModel, Person>(this, "UpdateItem", async (sender, person) =>
             {
                 await DataStore.UpdateItemAsync(person);
+
+                //this.UpdateContactsCommand.Execute(null);
+            });
+            MessagingCenter.Subscribe<ModifyContactViewModel, Person>(this, "RemoveItem", async (sender, person) =>
+            {
+                await DataStore.DeleteItemAsync(person.Id);
 
                 //this.UpdateContactsCommand.Execute(null);
             });
@@ -63,19 +73,22 @@ namespace ContactMap3.ViewModels
         public ICommand AddContactCommand => new Command(AddContact);
         public ICommand SaveContactCommand => new Command(SaveContact);
         public ICommand SyncContactCommand => new Command(SyncContacts);
+        public ICommand PageAppearingCommand => new Command(MadeAppearance);
+        public ICommand CheckForUpdates => new Command(NeedsUpdate);
+
         private async void SaveContact()
         {
             try
             {
                 await DataStore.StoreItemsAsync("contacts.json");
-            }catch (Exception e)
+            } catch (Exception e)
             {
                 Console.WriteLine($"Problem Saving Json:{e}");
             }
         }
+
         private async void SyncContacts()
         {
-
             if (IsBusy)
                 return;
 
@@ -103,7 +116,50 @@ namespace ContactMap3.ViewModels
             {
                 IsBusy = false;
             }
+        }//This Notifies View Correctly
+
+        public void MadeAppearance()
+        {
+            //Console.WriteLine("ContactsListAppearing");TODO: MAybe don't need to change this here
+            bool test = Application.Current.Properties.Remove("id");
+            Console.WriteLine($"Id Removed:{test}");
+            if (Application.Current.Properties.ContainsKey("id"))
+            {
+                Console.WriteLine((Application.Current.Properties["id"] as string[])[0]);
+            }
+            if (Contacts.Count == 0 || IsDirty)
+            {
+                UpdateContactsCommand.Execute(null);
+            }
         }
+
+        public async void NeedsUpdate() {
+            if (IsBusy)
+                return;
+            IsBusy = true;
+            try
+            {
+                var _items = await DataStore.GetItemsAsync(true);
+                if (Contacts != _items)
+                {
+                    foreach (Person p in _items)
+                    {
+                        if (!Contacts.Contains(p))
+                        {
+                            Contacts.Add(p);
+                        }
+                    }
+                }
+            }catch(Exception e)
+            {
+                Console.WriteLine($"UpdateFailed:{e}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
         private async void ItemSelected()
         {
             if (SelectedItem != null)

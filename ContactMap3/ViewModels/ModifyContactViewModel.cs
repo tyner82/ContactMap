@@ -286,6 +286,14 @@ namespace ContactMap3.ViewModels
             }
         }
 
+        public ICommand DeleteContactCommand => new Command(RemoveContact);
+        private async void RemoveContact()
+        {
+            MessagingCenter.Send<ModifyContactViewModel, Person>(this, "RemoveItem", person);
+            isDataSaved = true;
+            await Shell.Current.Navigation.PopToRootAsync();
+        }
+
         public ICommand SaveContactCommand => new Command(SaveContact);
         private async void SaveContact()
         {

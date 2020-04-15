@@ -166,8 +166,29 @@ namespace ContactMap3.Data
             }
             Console.WriteLine($"Deserializing Json:{contacts[0].Name}");
             List<Person> result = JsonConvert.DeserializeObject<List<Person>>(rawContacts);
+            await UpdateChanges(result);
             //contacts = result; //maybe shouldn't touch this here?
             return await Task.FromResult(result);
+        }
+        Task UpdateChanges(List<Person> result)
+        {
+            try
+            {
+                contacts.Clear();
+                List<Person> _contacts = result.ToList();
+                _contacts = _contacts.OrderBy(o => o.Name).ToList();
+                foreach (Person p in _contacts)
+                {
+                    contacts.Add(p);
+                }
+                //Console.WriteLine($"Add {person.Name}");
+                //await DataStore.AddItemAsync(_person);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Caught Exception while Refreshing Cache:{e}");
+            }
+            return Task.FromResult(true);
         }
     }
 }

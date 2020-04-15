@@ -8,9 +8,9 @@
 		<behaviors:EventHandlerBehavior EventName="Appearing">
 			<behaviors:InvokeCommandAction Command="{Binding PageAppearingCommand}" />
 		</behaviors:EventHandlerBehavior>
-		<behaviors:EventHandlerBehavior EventName="Disappearing">
+		<!--<behaviors:EventHandlerBehavior EventName="Disappearing">
 			<behaviors:InvokeCommandAction Command="{Binding PageDisappearingCommand}" />
-		</behaviors:EventHandlerBehavior>
+		</behaviors:EventHandlerBehavior>-->
 	</ContentPage.Behaviors>
     <maps:Map x:Name="map"
               ItemsSource="{Binding mapLocsProperties}">
@@ -21,19 +21,5 @@
                            Label="{Binding Label}"/>
             </DataTemplate>
         </maps:Map.ItemTemplate>
-        <!--<x:Arguments>
-            <maps:Map.MapElements>
-                <x:Arguments>
-                    <maps:Position >
-                        <x:Arguments>
-                            <x:Double >43.342096659219</x:Double>
-                            <x:Double>-79.8957465915528</x:Double>
-                        </x:Arguments>
-                    </maps:Position>
-                    <x:Double>0.01</x:Double>
-                    <x:Double>0.01</x:Double>
-                </x:Arguments>
-            </maps:Map.MapElements>
-        </x:Arguments>-->
     </maps:Map>
 </ContentPage>

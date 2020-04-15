@@ -17,6 +17,6 @@ namespace ContactMap3
             InitializeComponent();
             BindingContext = new AppShellViewModel();
         }
-        
+
     }
 }
