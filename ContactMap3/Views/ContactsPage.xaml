@@ -7,6 +7,14 @@
              Title="Contacts">
     
         <ContentPage.ToolbarItems>
+            <ToolbarItem Text="Sync"
+                         Order="Primary"
+                         Priority="0"
+                         Command="{Binding SyncContactCommand}" />
+            <ToolbarItem Text="Save"
+                         Order="Primary"
+                         Priority="0"
+                         Command="{Binding SaveContactCommand}" />
             <ToolbarItem Text="+"
                          Order="Primary"
                          Priority="0"

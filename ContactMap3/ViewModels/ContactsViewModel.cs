@@ -25,7 +25,7 @@ namespace ContactMap3.ViewModels
             }
         }
 
-        public ContactsViewModel(ContactsPage AContactsPage)
+        public ContactsViewModel()
         {
             Contacts = new ObservableCollection<Person>();
             MessagingCenter.Subscribe<ModifyContactViewModel, Person>(this, "AddItem", async (sender, person) =>
@@ -59,6 +59,51 @@ namespace ContactMap3.ViewModels
         }
 
         public ICommand SelectionCommand => new Command(ItemSelected);
+        public ICommand UpdateContactsCommand => new Command(UpdateContact);
+        public ICommand AddContactCommand => new Command(AddContact);
+        public ICommand SaveContactCommand => new Command(SaveContact);
+        public ICommand SyncContactCommand => new Command(SyncContacts);
+        private async void SaveContact()
+        {
+            try
+            {
+                await DataStore.StoreItemsAsync("contacts.json");
+            }catch (Exception e)
+            {
+                Console.WriteLine($"Problem Saving Json:{e}");
+            }
+        }
+        private async void SyncContacts()
+        {
+
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+            Console.WriteLine("UpdateContacts");
+
+            try
+            {
+                Contacts.Clear();
+                var _items = await DataStore.GetCacheAsync(true);
+                List<Person> _contacts = _items.ToList();
+                _contacts = _contacts.OrderBy(o => o.Name).ToList();
+                foreach (Person p in _contacts)
+                {
+                    Contacts.Add(p);
+                }
+                //Console.WriteLine($"Add {person.Name}");
+                //await DataStore.AddItemAsync(_person);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Caught Exception while Retrieving Json:{e}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
         private async void ItemSelected()
         {
             if (SelectedItem != null)
@@ -72,8 +117,7 @@ namespace ContactMap3.ViewModels
             }
         }
 
-        public ICommand UpdateContactsCommand => new Command(async () => await UpdateContact());
-        async Task UpdateContact()
+        private async void UpdateContact()
         {
             if (IsBusy)
                 return;
@@ -101,11 +145,9 @@ namespace ContactMap3.ViewModels
             finally
             {
                 IsBusy = false;
-                Console.WriteLine("IsBusy falsed");
             }
         }
 
-        public ICommand AddContactCommand => new Command(AddContact);
         private async void AddContact()
         {
             Console.WriteLine("Going to modify contact...");

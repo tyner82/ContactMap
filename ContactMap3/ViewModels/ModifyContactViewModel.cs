@@ -15,7 +15,7 @@ namespace ContactMap3.ViewModels
     public class ModifyContactViewModel : BaseViewModel
     {
         Person person;
-        string selectedCountryName;
+        string selectedCountryName = "America";
         string selectedStateName;
         List<string> states;
         List<string> countries;
