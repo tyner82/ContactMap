@@ -4,6 +4,8 @@
              xmlns:data="clr-namespace:ContactMap3.Data"
              xmlns:viewmodel="clr-namespace:ContactMap3.ViewModels"
              xmlns:behaviors="clr-namespace:Behaviors;assembly=Behaviors"
+             xmlns:local="clr-namespace:ContactMap3"
+             xmlns:mybehave="clr-namespace:ContactMap3.Behaviors"
              x:Class="ContactMap3.Views.ContactsPage"
              Title="Contacts">
         <ContentPage.Behaviors>
@@ -26,12 +28,13 @@
                          Priority="0"
                          Command="{Binding AddContactCommand}" />
         </ContentPage.ToolbarItems>
-    <ContentPage.Content>
+    <ContentPage.Content >
         <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}" Command="{Binding UpdateContactsCommand}">
-            <CollectionView Margin="20"
+            <CollectionView Margin="30"
                             x:DataType="viewmodel:ContactsViewModel"
                             ItemsSource="{Binding Contacts}"
                             ItemTemplate="{StaticResource ContactTemplate}"
+                            ItemSizingStrategy="MeasureFirstItem"
                             SelectionMode="Single"
                             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                             SelectionChangedCommand="{Binding SelectionCommand}">

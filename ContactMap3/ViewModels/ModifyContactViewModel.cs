@@ -290,13 +290,14 @@ namespace ContactMap3.ViewModels
         private async void RemoveContact()
         {
             MessagingCenter.Send<ModifyContactViewModel, Person>(this, "RemoveItem", person);
-            isDataSaved = true;
+            //isDataSaved = true;
             await Shell.Current.Navigation.PopToRootAsync();
         }
 
         public ICommand SaveContactCommand => new Command(SaveContact);
         private async void SaveContact()
         {
+            IsDirty = true;
             person = BuildPerson();
             if (IsValid(person))
             {

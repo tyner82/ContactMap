@@ -14,5 +14,10 @@ namespace ContactMap3.Views
             BindingContext = new MapViewModel(map);
             Console.WriteLine("Loaded Map");
         }
+
+        protected override bool OnBackButtonPressed()
+        {
+            return base.OnBackButtonPressed();
+        }
     }
 }

@@ -32,19 +32,9 @@ namespace ContactMap3.ViewModels
             Contacts = new ObservableCollection<Person>();
             MessagingCenter.Subscribe<ModifyContactViewModel, Person>(this, "AddItem", async (sender, person) =>
             {
+                
                 try
                 {
-                    //IsDirty = true;
-                    //var _person = person as Person;
-                    //Contacts.Add(_person);
-                    //Contacts.Clear();
-                    //List<Person> _contacts = Contacts.ToList();
-                    //_contacts = _contacts.OrderBy(o => o.Name).ToList();
-                    //foreach (Person p in _contacts)
-                    //{
-                    //    Contacts.Add(p);
-                    //}
-                    //Console.WriteLine($"Add {person.Name}");
                     await DataStore.AddItemAsync(person);
                 }
                 catch (Exception e)
@@ -164,9 +154,11 @@ namespace ContactMap3.ViewModels
         {
             if (SelectedItem != null)
             {
+
+                Shell.Current.Navigated += OnNavigated;
                 string personId = SelectedItem.Id;
 
-                Application.Current.Properties["id"] = new string[] { personId }; //I know not best way to do this
+                Application.Current.Properties["id"] = new string[] { personId }; //This is so map knows where we are, I imagine I can get the info some other way...
 
                 await Shell.Current.GoToAsync($"contactdetails?uid={personId}");
                 SelectedItem = null;
@@ -206,8 +198,19 @@ namespace ContactMap3.ViewModels
 
         private async void AddContact()
         {
-            Console.WriteLine("Going to modify contact...");
+            //add Navigated  event handler to trigger  the collection view to reload on return
+            //if data has changed 
+
+            Shell.Current.Navigated += OnNavigated;
+                Console.WriteLine("Going to modify contact...");
             await Shell.Current.GoToAsync($"modifycontact?uid={"0"}");
+        }
+
+
+        static void OnNavigated(object sender,ShellNavigatedEventArgs e)
+        {
+            Console.WriteLine($"Caught Navigated event{e.Previous},{e.Current},{e.Source}");
+            Shell.Current.Navigated -= OnNavigated;
         }
     }
 }

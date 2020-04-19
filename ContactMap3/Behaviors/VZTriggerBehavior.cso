@@ -1,0 +1,356 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
+using Xamarin.Forms;
+
+namespace ContactMap3 { 
+	internal interface IVZValueProvider
+	{
+		object ProvideValue(string fieldName);
+	}
+
+	internal abstract class VZExpression
+	{
+		public abstract bool Evaluate(IVZValueProvider valueProvider);
+		public abstract bool RequiresInvalidate(string fieldName);
+	}
+
+	internal class VZBinaryExpression : VZExpression
+	{
+		public string Type { get; set; }
+		public VZExpression LeftSide { get; set; }
+		public VZExpression RightSide { get; set; }
+
+		public override bool Evaluate(IVZValueProvider valueProvider)
+        {
+			switch(Type)
+			{
+				case "&":
+					return LeftSide.Evaluate(valueProvider) && RightSide.Evaluate(valueProvider);
+				case "|":
+					return LeftSide.Evaluate(valueProvider) || RightSide.Evaluate(valueProvider);
+			}
+            return false;
+        }
+
+		public override bool RequiresInvalidate(string fieldName) => LeftSide.RequiresInvalidate(fieldName) || RightSide.RequiresInvalidate(fieldName);
+	}
+
+	internal class VZConditionExpression : VZExpression
+	{
+		public string FieldName { get; set; }
+		public string Operation { get; set; }
+		public object Value { get; set; }
+
+		public override bool Evaluate(IVZValueProvider valueProvider)
+		{
+			object fieldValue = valueProvider.ProvideValue(FieldName);
+			switch(Operation)
+            {
+                case "!=":
+                    if(fieldValue == null && Value == null)
+                        return false;
+                    else
+                        return !object.Equals(fieldValue, Value);
+                case "=":
+					if(fieldValue == null && Value == null)
+                        return true;
+                    else
+						return object.Equals(fieldValue, Value);
+                case ">":
+					IComparable leftSide = fieldValue as IComparable;
+					IComparable rightSide = Value as IComparable;
+
+                    if(leftSide == null || rightSide == null)
+                        return false;
+
+                    return leftSide.CompareTo(rightSide) > 0;
+            }
+            return false;
+		}
+
+		public override bool RequiresInvalidate(string fieldName) => fieldName == FieldName;
+	}
+
+	/// <summary>
+    /// Behaviour that runs a custom trigger.
+	/// Trigger Format: property {=/>} value
+	/// Action Format: property {=} value
+    /// </summary>
+	public class VZTriggerBehavior : VZBehaviorBase<View>, IVZValueProvider
+    {
+		public static BindableProperty TriggersProperty = BindableProperty.CreateAttached(
+		    "Triggers",
+		    typeof(string),
+			typeof(VZTriggerBehavior),
+		    null,
+			propertyChanged: OnTriggersChanged);
+
+		private static BindableProperty CheckFieldProperty = BindableUtility.CreateProperty(
+			nameof(CheckField),
+			typeof(object),
+			typeof(VZTriggerBehavior));
+
+        // String holding the complete trigger.
+		public string Trigger { get; set; }
+
+        // String holding the complete action.
+		public string Action { get; set; }
+
+        // When trigger is not applied, this is the value.
+        object defaultValue = null;
+
+		VZExpression rootExpression;
+
+        // Bindable property to set when triggered.
+		BindableProperty setFieldProperty;
+
+        // Value set when triggered.
+        object actionValue = null;
+
+        // Need to keep binding context reference for proper event cleanup.
+		INotifyPropertyChanged viewBindingContext;
+
+		// Temporarily stores the value of the property being checked.
+        private object CheckField
+		{
+			get => GetValue(CheckFieldProperty);
+			set => SetValue(CheckFieldProperty, value);
+		}
+
+        View view;
+
+        // Used to ensure we only apply/unapply the action when needed.
+        bool isApplying = false;
+
+        public VZTriggerBehavior()
+        {
+        }
+
+		protected override void OnAttachedTo(View bindable)
+		{
+			base.OnAttachedTo(bindable);
+
+			view = bindable;
+			view.BindingContextChanged += OnViewBindingContextChanged;
+
+			ParseTrigger();
+			ParseAction();
+			Evauluate();
+		}
+
+		void OnViewBindingContextChanged(object sender, EventArgs e)
+		{
+			if(viewBindingContext != null)
+			{
+				viewBindingContext.PropertyChanged -= OnBindingContextValueChanged;
+				viewBindingContext = null;
+			}
+
+			Evauluate();
+
+			if(view.BindingContext is INotifyPropertyChanged notifyChanged)
+			{
+				viewBindingContext = notifyChanged;
+				notifyChanged.PropertyChanged += OnBindingContextValueChanged;
+			}
+		}
+
+		void OnBindingContextValueChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if(rootExpression.RequiresInvalidate(e.PropertyName))
+				Evauluate();
+		}
+
+		protected override void OnDetachingFrom(View bindable)
+		{
+			base.OnDetachingFrom(bindable);
+
+			if(viewBindingContext != null)
+            {
+                viewBindingContext.PropertyChanged -= OnBindingContextValueChanged;
+                viewBindingContext = null;
+            }
+            
+            if(view != null)
+			{
+				// When detaching, reset value to default.
+				if(isApplying)
+					view.SetValue(setFieldProperty, defaultValue);
+
+				view.BindingContextChanged -= OnViewBindingContextChanged;
+				view = null;
+			}
+		}
+
+        // Parses the trigger string into sub-components.
+        void ParseTrigger()
+		{
+			List<string> tokens = ParseTokens(Trigger);
+
+            int index = 0;
+			while(index < tokens.Count)
+			{                        
+				if(rootExpression == null && index == 0)
+				{
+					VZConditionExpression conditionExpression = new VZConditionExpression()
+                    {
+                        FieldName = tokens[index++],
+                        Operation = tokens[index++],
+                        Value = ParseValue(tokens[index++])
+                    };
+					rootExpression = conditionExpression;
+				}
+				else
+				{               
+                    string binaryType = tokens[index++];
+
+					VZConditionExpression rightSide = new VZConditionExpression()
+                    {
+                        FieldName = tokens[index++],
+                        Operation = tokens[index++],
+						Value = ParseValue(tokens[index++])
+                    };
+
+					VZBinaryExpression binaryExpression = new VZBinaryExpression()
+					{
+						Type = binaryType,
+						LeftSide = rootExpression,
+						RightSide = rightSide
+					};
+
+					rootExpression = binaryExpression;
+				}
+			}
+		}
+
+        // Parses the action string into sub-components.
+        void ParseAction()
+		{
+			List<string> tokens = ParseTokens(Action);
+
+			setFieldProperty = GetBindableProperty(view, tokens[0]);
+			actionValue = ParseValue(tokens[2]);
+		}
+
+        // Evaluates the trigger expression and applies/unapplies if needed.
+        void Evauluate()
+		{
+			bool newIsApplying = EvaluateExpression();
+			if(newIsApplying != isApplying)
+			{
+				isApplying = newIsApplying;
+				if(isApplying)
+				{
+					defaultValue = view.GetValue(setFieldProperty);
+					view.SetValue(setFieldProperty, actionValue);
+				}
+				else 
+					view.SetValue(setFieldProperty, defaultValue);
+			}
+		}
+
+        public object ProvideValue(string fieldName)
+		{
+			SetBinding(CheckFieldProperty, new Binding(fieldName, source: view.BindingContext));
+			return CheckField;
+		}
+
+        // Evaluates the trigger expression, return the result.
+		bool EvaluateExpression()
+		{
+			return rootExpression.Evaluate(this);
+		}
+
+        // Returns a Bindable Property from an object.
+		BindableProperty GetBindableProperty(object obj, string propertyName)
+		{
+			Type type = obj.GetType();
+            
+			// Assumes Bindable Property follows convention.
+			IVZReflectionService reflectionService = DependencyService.Get<IVZReflectionService>();
+			FieldInfo field = reflectionService.GetField(type, propertyName + "Property", BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
+
+			return field.GetValue(null) as BindableProperty;
+		}
+
+        // Parses a string value into a .Net value.
+        object ParseValue(string str)
+		{
+			if(str.StartsWith("'"))
+				return str.Substring(1, str.Length - 2);
+            else if(str == "null")
+				return null;
+			else if(str.ToLower() == "true")
+				return true;
+			else if(str.ToLower() == "false")
+				return false;
+			else if(int.TryParse(str, out int integer))
+				return integer;
+            return null;
+		}
+
+        // Takes an expression string and parses out the individual tokens.
+        List<string> ParseTokens(string src)
+		{
+			// Spaces are removed completely, may need to rethink this in the future.
+			src = src.Replace(" ", "");
+
+            // Loop through string, Seperating operations from non-operators.
+			string seperators = "<>=&|!";
+			List<string> tokens = new List<string>();
+			string currentToken = "";
+            bool isSeperator = false;
+			for(int i = 0; i < src.Length; i++)
+            {
+				bool newIsSeperator = seperators.Contains(src[i].ToString());
+				if(newIsSeperator != isSeperator)
+				{
+					tokens.Add(currentToken);
+					currentToken = "";
+
+					currentToken += src[i];
+				}
+				else
+				{
+					currentToken += src[i];
+				}
+
+				isSeperator = newIsSeperator;
+            }
+
+			if(currentToken.Length > 0)
+				tokens.Add(currentToken);
+
+			return tokens;
+		}
+
+		public static string GetTriggers(BindableObject bindable) => (string)bindable.GetValue(TriggersProperty);
+		public static void SetTriggers(BindableObject bindable, string triggers) => bindable.SetValue(TriggersProperty, triggers);
+
+		static void OnTriggersChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			View view = bindable as View;
+            if(view == null)
+                return;
+
+            IEnumerable<Behavior> triggerBehaviors = view.Behaviors.Where(_ => _ is VZTriggerBehavior);
+            triggerBehaviors.ForEach(_ => view.Behaviors.Remove(_));
+
+			string triggerSource = (string)newValue;
+			string[] triggers = triggerSource.Split(new [] {';'});
+
+			foreach(string trigger in triggers)
+			{
+				string[] parts = trigger.Split(',');
+				view.Behaviors.Add(new VZTriggerBehavior()
+				{
+					Trigger = parts[0],
+					Action = parts[1]
+				});
+			}
+		}
+	}
+}
