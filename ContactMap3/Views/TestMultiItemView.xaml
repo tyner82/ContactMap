@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ContactMap3.ViewModels"
+             x:Class="ContactMap3.Views.TestMultiItemView">
+    <ContentView.Content>
+        <StackLayout Margin="20">
+            
+    <RefreshView  BindingContext="vm:ContactsViewModel" IsRefreshing="{Binding IsBusy, Mode=OneWay}" Command="{Binding UpdateContactsCommand}">
+        <CollectionView x:Name="ContactCollection"
+                        ItemTemplate="{StaticResource ContactActionTemplate}">
+        
+            <!--<CollectionView.ItemTemplate>
+                <DataTemplate>ContactActionTemplate
+                
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            -->
+            <CollectionView.EmptyView>
+                <StackLayout>
+                    <Label Text="No results matched your filter."
+                           Margin="10,25,10,10"
+                           FontAttributes="Bold"
+                           FontSize="18"
+                           HorizontalOptions="Fill"
+                           HorizontalTextAlignment="Center" />
+                    <Label Text="Try a broader filter?"
+                           FontAttributes="Italic"
+                           FontSize="12"
+                           HorizontalOptions="Fill"
+                           HorizontalTextAlignment="Center" />
+                </StackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </RefreshView>
+    <SearchBar x:Name="searchBar"
+               SearchCommand="{Binding FilterCommand}"
+               SearchCommandParameter="{Binding Source={x:Reference searchBar}, Path=Text}"
+               Placeholder="Action" />
+</StackLayout>
+    </ContentView.Content>
+</ContentView>

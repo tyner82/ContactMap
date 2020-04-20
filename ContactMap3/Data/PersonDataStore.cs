@@ -24,7 +24,7 @@ namespace ContactMap3.Data
 
         public PersonDataStore()
         {
-            Console.WriteLine($"New DataStore Created...{this.GetHashCode()}");
+            //Console.WriteLine($"New DataStore Created...{this.GetHashCode()}");
             contacts = new List<Person>();
             //List<Person> _ontacts = new List<Person>();
             contacts.Add(new Person

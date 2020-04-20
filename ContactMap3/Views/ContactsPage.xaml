@@ -5,6 +5,7 @@
              xmlns:viewmodel="clr-namespace:ContactMap3.ViewModels"
              xmlns:behaviors="clr-namespace:Behaviors;assembly=Behaviors"
              xmlns:local="clr-namespace:ContactMap3"
+             xmlns:views="clr-namespace:ContactMap3.Views"
              xmlns:mybehave="clr-namespace:ContactMap3.Behaviors"
              x:Class="ContactMap3.Views.ContactsPage"
              Title="Contacts">
@@ -29,6 +30,22 @@
                          Command="{Binding AddContactCommand}" />
         </ContentPage.ToolbarItems>
     <ContentPage.Content >
+        <StackLayout>
+            <views:TestMultiItemView>
+                <views:TestMultiItemView.BindingContext>
+                    <views:TestMultiViewModel>
+                        <x:Arguments>
+                            <x:String>Test</x:String>
+                        </x:Arguments>
+                    </views:TestMultiViewModel>
+                </views:TestMultiItemView.BindingContext>
+            </views:TestMultiItemView>
+        </StackLayout>
+    </ContentPage.Content>
+
+
+</ContentPage>
+<!--
         <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}" Command="{Binding UpdateContactsCommand}">
             <CollectionView Margin="30"
                             x:DataType="viewmodel:ContactsViewModel"
@@ -40,7 +57,4 @@
                             SelectionChangedCommand="{Binding SelectionCommand}">
             </CollectionView>
         </RefreshView>
-    </ContentPage.Content>
-
-
-</ContentPage>
+-->
